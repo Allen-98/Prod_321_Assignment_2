@@ -3,7 +3,7 @@
     Properties
     {
         _MainTex("Texture", 2D) = "white" {}
-        _Color ("Main color", Color) = (255, 255, 255, 255)
+        _Color ("Main color", Color) = (1, 1, 1, 1)
         _InflationAmount("Inflation Amount", Range(-0.02, 0.15)) = 0
     }
 
