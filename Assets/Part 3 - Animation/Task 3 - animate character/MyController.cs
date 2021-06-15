@@ -5,76 +5,87 @@ using UnityEngine;
 public class MyController : MonoBehaviour
 {
 
-
+    public float Speed = 200;
 
     private Animator anim;
+	private bool isMoving = false;
+    private bool superAttack = false;
+
+    float translationX, translationZ;
 
 
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
+        translationX = 0; translationZ = 0;
     }
 
 	// Update is called once per frame
 	void Update()
-	{
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            if (!isMoving)
+            {
+                anim.SetBool("isMoving", true);
+                isMoving = true;
+            }
+            else
+            {
+                anim.SetBool("isMoving", false);
+                isMoving = false;
+            }
+        }
 
-		if (Input.GetKeyDown(KeyCode.T))
-		{
-			anim.SetFloat("Vertical", 0.0f, 0, Time.deltaTime);
-			anim.SetFloat("Horizontal", 0.0f, 0, Time.deltaTime);
-		}
-		//Run forward
-		if (Input.GetKeyDown(KeyCode.W))
-		{
-			anim.SetFloat("Vertical", 1.0f, 0, Time.deltaTime);
-			anim.SetFloat("Horizontal", 0.0f, 0, Time.deltaTime);
-		}
-		//Run 45 up right
-		if (Input.GetKeyDown(KeyCode.E))
-		{
-			anim.SetFloat("Vertical", 1.0f, 0, Time.deltaTime);
-			anim.SetFloat("Horizontal", 1.0f, 0, Time.deltaTime);
-		}
-		//Run strafe right
-		if (Input.GetKeyDown(KeyCode.D))
-		{
-			anim.SetFloat("Vertical", 0.0f, 0, Time.deltaTime);
-			anim.SetFloat("Horizontal", 1.0f, 0, Time.deltaTime);
-		}
-		//Run 45 back right
-		if (Input.GetKeyDown(KeyCode.X))
-		{
-			anim.SetFloat("Vertical", -1.0f, 0, Time.deltaTime);
-			anim.SetFloat("Horizontal", 1.0f, 0, Time.deltaTime);
-		}
-		//Run backwards
-		if (Input.GetKeyDown(KeyCode.S))
-		{
-			anim.SetFloat("Vertical", -1.0f, 0, Time.deltaTime);
-			anim.SetFloat("Horizontal", 0.0f, 0, Time.deltaTime);
-		}
-		//Run 45 back left
-		if (Input.GetKeyDown(KeyCode.Z))
-		{
-			anim.SetFloat("Vertical", -1.0f, 0, Time.deltaTime);
-			anim.SetFloat("Horizontal", -1.0f, 0, Time.deltaTime);
-		}
-		//Run strafe left
-		if (Input.GetKeyDown(KeyCode.A))
-		{
-			anim.SetFloat("Vertical", 0.0f, 0, Time.deltaTime);
-			anim.SetFloat("Horizontal", -1.0f, 0, Time.deltaTime);
-		}
-		//Run 45 up left
-		if (Input.GetKeyDown(KeyCode.Q))
-		{
-			anim.SetFloat("Vertical", 1.0f, 0, Time.deltaTime);
-			anim.SetFloat("Horizontal", -1.0f, 0, Time.deltaTime);
+        translationX = Mathf.MoveTowards(translationX, Input.GetAxis("Horizontal"), Time.deltaTime * Speed);
+        translationZ = Mathf.MoveTowards(translationZ, Input.GetAxis("Vertical"), Time.deltaTime * Speed);
+
+        //if (translationX == 0 && translationZ == 0)
+        //    isMoving = false;
+        //else
+        //    isMoving = true;
+
+        //anim.SetBool("isMoving", isMoving);
+        anim.SetFloat("Horizontal", translationX);
+        anim.SetFloat("Vertical", translationZ);
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && isMoving)
+        {
+            anim.SetTrigger("UpperAttack1");
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse1) && isMoving)
+        {
+            anim.SetTrigger("LowerAttack1");
+        }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            anim.SetBool("SuperAttack", true);
+            anim.SetTrigger("SuperAttackTriggle");
+            superAttack = true;
+        }
+
+        if (superAttack && Input.GetKeyDown(KeyCode.F))
+        {
+            anim.SetTrigger("Combo1");
+        }
+
+        if (superAttack && Input.GetKeyDown(KeyCode.E))
+        {
+            anim.SetTrigger("Combo2");
+        }
+
+        if (superAttack && Input.GetKeyDown(KeyCode.Q))
+        {
+            anim.SetTrigger("FinishAttack");
+            anim.SetBool("SuperAttack", false);
+        }
 
 
-		}
 
-	}
+
+    }
 }
