@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MyController : MonoBehaviour
 {
 
     public float Speed = 200;
+    public Text modeText; 
 
     private Animator anim;
 	private bool isMoving = false;
@@ -17,6 +19,7 @@ public class MyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        modeText.text = "Stand Mode";
         anim = GetComponent<Animator>();
         translationX = 0; translationZ = 0;
     }
@@ -30,11 +33,13 @@ public class MyController : MonoBehaviour
             {
                 anim.SetBool("isMoving", true);
                 isMoving = true;
+                modeText.text = "Normal Fight Mode";
             }
             else
             {
                 anim.SetBool("isMoving", false);
                 isMoving = false;
+                modeText.text = "Stand Mode";
             }
         }
 
@@ -50,6 +55,8 @@ public class MyController : MonoBehaviour
         anim.SetFloat("Horizontal", translationX);
         anim.SetFloat("Vertical", translationZ);
 
+
+
         if (Input.GetKeyDown(KeyCode.Mouse0) && isMoving)
         {
             anim.SetTrigger("UpperAttack1");
@@ -61,11 +68,12 @@ public class MyController : MonoBehaviour
             anim.SetTrigger("LowerAttack1");
         }
 
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G) && isMoving)
         {
             anim.SetBool("SuperAttack", true);
             anim.SetTrigger("SuperAttackTriggle");
             superAttack = true;
+            modeText.text = "Super Attack Mode";
         }
 
         if (superAttack && Input.GetKeyDown(KeyCode.F))
@@ -81,7 +89,8 @@ public class MyController : MonoBehaviour
         if (superAttack && Input.GetKeyDown(KeyCode.Q))
         {
             anim.SetTrigger("FinishAttack");
-            anim.SetBool("SuperAttack", false);
+            superAttack = false;
+            modeText.text = "Normal Fight Mode";
         }
 
 
